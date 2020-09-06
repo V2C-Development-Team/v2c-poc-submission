@@ -1,0 +1,15 @@
+[submodule "v2c-desktop-controller-linux"]
+	path = v2c-desktop-controller-linux
+	url = git@github.com:V2C-Development-Team/v2c-desktop-controller-linux
+[submodule "v2c-dispatcher"]
+	path = v2c-dispatcher
+	url = git@github.com:V2C-Development-Team/v2c-dispatcher
+[submodule "v2c-dashboard"]
+	path = v2c-dashboard
+	url = git@github.com:V2C-Development-Team/v2c-dashboard
+[submodule "v2c-gaming-poc"]
+	path = v2c-gaming-poc
+	url = git@github.com:V2C-Development-Team/v2c-gaming-poc
+[submodule "v2c-recognizer"]
+	path = v2c-recognizer
+	url = git@github.com:V2C-Development-Team/v2c-recognizer
