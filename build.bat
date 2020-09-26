@@ -1,5 +1,8 @@
 @echo off
 
+rem pull the repos
+git submodule update --init --recursive
+
 rem build the java projects
 for %%m in (v2c-desktop-controller-linux v2c-dispatcher) do (
   echo Building %%m
