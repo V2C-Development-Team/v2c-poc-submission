@@ -15,7 +15,7 @@ Please make sure the following are installed **before** building the project.
 
 ## Automatic Build
 
-It's important that you've installed the appropriate SSH keys the remote repo service.
+**It's important that you've installed the appropriate SSH keys in the remote repo service.**
 
 You can exit the build script (`build.bat` on Windows) to build the program.
 
@@ -44,4 +44,6 @@ These steps must be run in order.
 
 ## Notes
 
-Additional instructions are in each of the `README.md` files in the various directories.
+- Additional instructions are in each of the `README.md` files in the various directories.
+- If you run into issues building `pyaudio`, please attempt to install it manually with `pipwin`.
+
