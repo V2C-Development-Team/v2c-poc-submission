@@ -8,7 +8,7 @@ Please make sure the following are installed **before** building the project.
 
 - [Java JDK 11 LTS](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 - [Node 12 LTS](https://nodejs.org/en/download/)
-- [Python 3.7.9 64-bit](https://www.python.org/downloads/windows/) (make sure that pip is on the PATH)
+- [Python 3.6 64-bit](https://www.python.org/downloads/windows/) (make sure that pip is on the PATH)
 - [Microsoft Visual C++ 14.0](https://aka.ms/vs/16/release/vs_buildtools.exe)
 - [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/packages/pyaudio-0.2.8.py33.exe) - if on Windows
 - [swig](http://prdownloads.sourceforge.net/swig/swigwin-4.0.2.zip) - if on Windows, add to PATH
