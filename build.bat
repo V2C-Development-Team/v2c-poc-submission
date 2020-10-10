@@ -12,7 +12,7 @@ for %%m in (v2c-desktop-controller-linux v2c-dispatcher) do (
 )
 
 rem build the python modules
-for %%p in (pyaudio playsound pocketsphinx SpeechRecognition pydub websockets) do (
+for %%p in (pyaudio playsound pocketsphinx SpeechRecognition pydub websocket-client websocket keyboard) do (
   echo Checking for %%p
   pip list | find "%%p">nul
   if errorlevel 1 pip install "%%p"
