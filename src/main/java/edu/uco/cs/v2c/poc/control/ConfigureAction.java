@@ -11,15 +11,11 @@ public class ConfigureAction extends ModuleAction {
   }
 
   @Override public void actionPerformed(ActionEvent e) {
-    System.out.printf("Hit configuration button for %1$s.\n", super.moduleHandler.getModuleID().toString());
     ConfigurationFrame configurationFrame = new ConfigurationFrame(this);
     configurationFrame.setVisible(true);
   }
   
   public void onConfigUpdate(String runtimeBin, String moduleBin) {
-    System.out.printf("Got new configs for %1$s: runtime=%2$s, module=%3$s.\n",
-        super.moduleHandler.getModuleID().toString(), runtimeBin, moduleBin);
-    
     // TODO maybe do some validation and verification here
     
     moduleHandler.setRuntimeBin(runtimeBin);

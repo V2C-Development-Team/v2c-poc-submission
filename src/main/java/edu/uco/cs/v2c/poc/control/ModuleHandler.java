@@ -52,7 +52,6 @@ public class ModuleHandler implements Runnable {
       }
       
       if(this.bin == null) this.bin = bin;
-      System.out.println("Registered at: " + this.bin);
     }
     
     public String getBin() {
@@ -74,6 +73,7 @@ public class ModuleHandler implements Runnable {
     this.moduleID = moduleID;
     this.moduleComponent = moduleComponent;
     if(moduleID != null) {
+      moduleComponent.setActive(false);
       runtimeBin = moduleID.getProcessType().getBin();
       moduleBin = moduleID.getDefaultModulePath();
     }
@@ -144,6 +144,7 @@ public class ModuleHandler implements Runnable {
           Process process = processBuilder.start();
           currentProcess.set(process);
           
+          moduleComponent.setActive(true);
           for(JButton button : enabledButtonsOnLivingProcess)
             button.setEnabled(true);
           for(JButton button : enabledButtonsOnDyingProcess)
@@ -161,6 +162,7 @@ public class ModuleHandler implements Runnable {
           currentProcess.set(null);
         } finally {
           go.set(false);
+          moduleComponent.setActive(false);
           for(JButton button : enabledButtonsOnDyingProcess)
             button.setEnabled(true);
           for(JButton button : enabledButtonsOnLivingProcess)

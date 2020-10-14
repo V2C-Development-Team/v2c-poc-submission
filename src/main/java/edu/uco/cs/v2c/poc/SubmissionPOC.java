@@ -17,9 +17,9 @@ public class SubmissionPOC {
       if(moduleID.getProcessType() == null) continue;
       ModuleComponent moduleComponent = landingFrame.getModule(moduleID);
       ModuleHandler moduleHandler = ModuleHandler.build(moduleComponent, moduleID);
-      JButton startButton = moduleComponent.addButton("START", new StartAction(moduleHandler));
+      JButton startButton = moduleComponent.addButton("START MODULE", new StartAction(moduleHandler));
       moduleHandler.addButtonToEnableOnDyingProcess(startButton);
-      JButton stopButton = moduleComponent.addButton("STOP", new StopAction(moduleHandler));
+      JButton stopButton = moduleComponent.addButton("STOP MODULE", new StopAction(moduleHandler));
       stopButton.setEnabled(false);
       moduleHandler.addButtonToEnableOnLivingProcess(stopButton);
       moduleComponent.addButton("CONFIGURE", new ConfigureAction(moduleHandler));
