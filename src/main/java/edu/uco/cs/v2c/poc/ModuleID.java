@@ -5,7 +5,7 @@ import edu.uco.cs.v2c.poc.control.ModuleHandler.ProcessType;
 public enum ModuleID {
   HOME,
   DISPATCHER(ProcessType.JAVA_PROCESS, "v2c-dispatcher/build/libs/v2c-dispatcher.jar"),
-  RECOGNIZER(ProcessType.PYTHON_PROCESS, "v2c-recognizer/Recognizer"),
+  RECOGNIZER(ProcessType.PYTHON_PROCESS, "v2c-recognizer/Recognizer/speech.py"),
   DESKTOP_CONTROLLER(ProcessType.JAVA_PROCESS, "v2c-desktop-controller-linux/build/libs/v2c-desktop-controller-linux.jar"),
   DASHBOARD_BACKEND(ProcessType.JAVA_PROCESS, "v2c-dashboard-backend/build/libs/v2c-dashboard-backend.jar"),
   DASHBOARD_FRONTEND(ProcessType.NPM_PROCESS, "v2c-dashboard");

@@ -104,6 +104,7 @@ public class ModuleHandler implements Runnable {
         currentProcess.set(null);
         
         List<String> commands = new ArrayList<>();
+        String workDir = null;
         
         switch(moduleID.getProcessType()) {
         case JAVA_PROCESS:
@@ -114,18 +115,23 @@ public class ModuleHandler implements Runnable {
         case NPM_PROCESS:
           commands.add(runtimeBin);
           commands.add("start");
+          workDir = moduleBin;
           break;
         case PYTHON_PROCESS:
           commands.add(runtimeBin);
-          commands.add(moduleBin);
+          commands.add("-u"); 
+          String[] moduleTokens = moduleBin.replace("\\\\", "\\").replace("\\", "/").split("/");
+          commands.add(moduleTokens[moduleTokens.length - 1]);
+          if(moduleTokens.length > 1)
+            workDir = moduleBin.substring(0, moduleBin.length() - moduleTokens[moduleTokens.length - 1].length());
           break;
         default:
           break;
         }
         
         ProcessBuilder processBuilder = new ProcessBuilder(commands);
-        if(moduleID.getProcessType() == ProcessType.PYTHON_PROCESS)
-          processBuilder.directory(new File(moduleBin));
+        if(workDir != null)
+          processBuilder.directory(new File(workDir));
         processBuilder.redirectErrorStream(true);
         
         try {
@@ -155,6 +161,9 @@ public class ModuleHandler implements Runnable {
   public void terminate() {
     Process process = currentProcess.get();
     if(process != null) {
+      process.descendants().forEach(p -> {
+        p.destroy();
+      });
       process.destroy();
     }
   }
