@@ -10,4 +10,8 @@ public abstract class ModuleAction implements ActionListener {
     this.moduleHandler = handler;
   }
   
+  public ModuleHandler getModuleHandler() {
+    return moduleHandler;
+  }
+  
 }

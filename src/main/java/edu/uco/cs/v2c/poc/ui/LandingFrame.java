@@ -14,17 +14,6 @@ public class LandingFrame extends JFrame {
   private JTabbedPane tabbedPane = new JTabbedPane();
   private Map<ModuleID, ModuleComponent> tabPanels = new LinkedHashMap<>();
   
-  /*
-  private ModuleComponent[] tabPanels = new ModuleComponent[] {
-      new ModuleComponent("Home"),
-      new ModuleComponent("Dispatcher"),
-      new ModuleComponent("Recognizer"),
-      new ModuleComponent("Desktop Controller"),
-      new ModuleComponent("Dashboard Backend"),
-      new ModuleComponent("Dashboard Frontend")
-  };
-  */
-  
   public LandingFrame() {
     super("Submission POC");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
