@@ -3,11 +3,17 @@ package edu.uco.cs.v2c.poc.ui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import edu.uco.cs.v2c.poc.control.ModuleHandler;
 
 public class ModuleComponent extends JPanel {
   
@@ -28,7 +34,7 @@ public class ModuleComponent extends JPanel {
     return label;
   }
   
-  public void pushLine(String line) {
+  public void putLine(String line) {
     textArea.insert(line + '\n', 0);
   }
   

@@ -1,7 +1,9 @@
 package edu.uco.cs.v2c.poc.control;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -10,6 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.SystemUtils;
 
 import edu.uco.cs.v2c.poc.ModuleID;
+import edu.uco.cs.v2c.poc.ui.ModuleComponent;
 
 public class ModuleHandler implements Runnable {
   
@@ -55,21 +58,23 @@ public class ModuleHandler implements Runnable {
   
   private AtomicBoolean go = new AtomicBoolean();
   private AtomicReference<Process> currentProcess = new AtomicReference<>();
+  private ModuleComponent moduleComponent = null;
   private ModuleID moduleID = null;
   private String runtimeBin = null;
   private String moduleBin = null;
   private Thread thread = null;
   
-  private ModuleHandler(ModuleID moduleID) {
+  private ModuleHandler(ModuleComponent moduleComponent, ModuleID moduleID) {
     this.moduleID = moduleID;
+    this.moduleComponent = moduleComponent;
     if(moduleID != null) {
       runtimeBin = moduleID.getProcessType().getBin();
       moduleBin = moduleID.getDefaultModulePath();
     }
   }
   
-  public static ModuleHandler build(ModuleID moduleID) {
-    ModuleHandler handler = new ModuleHandler(moduleID);
+  public static ModuleHandler build(ModuleComponent moduleComponent, ModuleID moduleID) {
+    ModuleHandler handler = new ModuleHandler(moduleComponent, moduleID);
     handler.thread = new Thread(handler);
     handler.thread.setDaemon(true);
     handler.thread.start();
@@ -124,7 +129,15 @@ public class ModuleHandler implements Runnable {
         processBuilder.redirectErrorStream(true);
         
         try {
-          currentProcess.set(processBuilder.start());
+          Process process = processBuilder.start();
+          currentProcess.set(process);
+          
+          try(BufferedReader streamReader = new BufferedReader(
+              new InputStreamReader(process.getInputStream()))) {
+            String line;
+            while((line = streamReader.readLine()) != null)
+              moduleComponent.putLine(line);
+          }
         } catch(IOException e) {
           e.printStackTrace();
           currentProcess.set(null);
@@ -141,7 +154,9 @@ public class ModuleHandler implements Runnable {
   
   public void terminate() {
     Process process = currentProcess.get();
-    if(process != null) process.destroy();
+    if(process != null) {
+      process.destroy();
+    }
   }
   
   public boolean isRunning() {

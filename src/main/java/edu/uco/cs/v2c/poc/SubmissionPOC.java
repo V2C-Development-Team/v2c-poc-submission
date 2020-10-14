@@ -14,7 +14,7 @@ public class SubmissionPOC {
     for(ModuleID moduleID : ModuleID.values()) {
       if(moduleID.getProcessType() == null) continue;
       ModuleComponent moduleComponent = landingFrame.getModule(moduleID);
-      ModuleHandler moduleHandler = ModuleHandler.build(moduleID);
+      ModuleHandler moduleHandler = ModuleHandler.build(moduleComponent, moduleID);
       moduleComponent.addButton("START", new StartAction(moduleHandler));
       moduleComponent.addButton("STOP", new StopAction(moduleHandler));
       moduleComponent.addButton("CONFIGURE", new ConfigureAction(moduleHandler));

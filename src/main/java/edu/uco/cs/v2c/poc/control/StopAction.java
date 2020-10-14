@@ -9,7 +9,7 @@ public class StopAction extends ModuleAction {
   }
   
   @Override public void actionPerformed(ActionEvent e) {
-    moduleHandler.go();
+    moduleHandler.terminate();
   }
   
 }
