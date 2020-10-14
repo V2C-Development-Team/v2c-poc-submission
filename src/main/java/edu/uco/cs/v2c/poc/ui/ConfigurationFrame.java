@@ -81,4 +81,14 @@ public class ConfigurationFrame extends JFrame {
     setLocationRelativeTo(null);
   }
   
+  @Override public void setVisible(boolean visible) {
+    if(visible) {
+      ConfigOption.RUNTIME.getTextField().setText(
+          configureAction.getModuleHandler().getRuntimeBin());
+      ConfigOption.MODULE.getTextField().setText(
+          configureAction.getModuleHandler().getModuleBin());
+    }
+    super.setVisible(visible);
+  }
+  
 }

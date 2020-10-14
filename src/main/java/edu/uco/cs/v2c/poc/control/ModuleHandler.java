@@ -7,14 +7,50 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.commons.lang3.SystemUtils;
+
 import edu.uco.cs.v2c.poc.ModuleID;
 
 public class ModuleHandler implements Runnable {
   
   public static enum ProcessType {
-    JAVA_PROCESS,
-    NPM_PROCESS,
-    PYTHON_PROCESS
+    JAVA_PROCESS("java"),
+    NPM_PROCESS("npm"),
+    PYTHON_PROCESS("python");
+    
+    private String bin = null;
+    
+    private ProcessType(String bin) {
+      
+      String[] pathDirs = System.getenv("PATH").split(";");
+      if(SystemUtils.IS_OS_WINDOWS) {
+        String[] pathExts = System.getenv("PATHEXT").split(";");
+        seek:for(String pathDir : pathDirs) {
+          for(String pathExt : pathExts) {
+            File binary = new File(pathDir, bin + pathExt);
+            if(binary.exists() && binary.canExecute()) {
+              this.bin = pathDir + (pathDir.charAt(pathDir.length() - 1) == '\\' ? "" : "\\") + bin + pathExt.toLowerCase();
+              break seek;
+            }
+          }
+        }
+      } else {
+        for(String pathDir : pathDirs) {
+          File binary = new File(pathDir, bin);
+          if(binary.exists() && binary.canExecute()) {
+            this.bin = pathDir + "/" + bin;
+            break;
+          }
+        }
+      }
+      
+      if(this.bin == null) this.bin = bin;
+      System.out.println("Registered at: " + this.bin);
+    }
+    
+    public String getBin() {
+      return bin;
+    }
   }
   
   private AtomicBoolean go = new AtomicBoolean();
@@ -26,6 +62,10 @@ public class ModuleHandler implements Runnable {
   
   private ModuleHandler(ModuleID moduleID) {
     this.moduleID = moduleID;
+    if(moduleID != null) {
+      runtimeBin = moduleID.getProcessType().getBin();
+      moduleBin = moduleID.getDefaultModulePath();
+    }
   }
   
   public static ModuleHandler build(ModuleID moduleID) {
@@ -36,8 +76,16 @@ public class ModuleHandler implements Runnable {
     return handler;
   }
   
+  public String getRuntimeBin() {
+    return runtimeBin;
+  }
+  
   public void setRuntimeBin(String runtimeBin) {
     this.runtimeBin = runtimeBin;
+  }
+  
+  public String getModuleBin() {
+    return moduleBin;
   }
   
   public void setModuleBin(String moduleBin) {

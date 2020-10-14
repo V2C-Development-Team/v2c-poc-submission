@@ -16,6 +16,7 @@ targetCompatibility = prjCompat
 
 dependencies {
   implementation 'commons-cli:commons-cli:1.4'
+  implementation 'org.apache.commons:commons-lang3:3.11'
   implementation 'org.json:json:20200518'
   implementation 'org.slf4j:slf4j-simple:1.7.30'
   testImplementation 'org.easymock:easymock:4.0.2'

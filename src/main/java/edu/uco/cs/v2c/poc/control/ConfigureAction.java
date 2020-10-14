@@ -19,6 +19,11 @@ public class ConfigureAction extends ModuleAction {
   public void onConfigUpdate(String runtimeBin, String moduleBin) {
     System.out.printf("Got new configs for %1$s: runtime=%2$s, module=%3$s.\n",
         super.moduleHandler.getModuleID().toString(), runtimeBin, moduleBin);
+    
+    // TODO maybe do some validation and verification here
+    
+    moduleHandler.setRuntimeBin(runtimeBin);
+    moduleHandler.setModuleBin(moduleBin);
   }
   
 }
