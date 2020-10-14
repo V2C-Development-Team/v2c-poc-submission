@@ -5,9 +5,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+
+import javax.swing.JButton;
 
 import org.apache.commons.lang3.SystemUtils;
 
@@ -60,6 +64,8 @@ public class ModuleHandler implements Runnable {
   private AtomicReference<Process> currentProcess = new AtomicReference<>();
   private ModuleComponent moduleComponent = null;
   private ModuleID moduleID = null;
+  private Set<JButton> enabledButtonsOnLivingProcess = new HashSet<>();
+  private Set<JButton> enabledButtonsOnDyingProcess = new HashSet<>();
   private String runtimeBin = null;
   private String moduleBin = null;
   private Thread thread = null;
@@ -138,27 +144,41 @@ public class ModuleHandler implements Runnable {
           Process process = processBuilder.start();
           currentProcess.set(process);
           
+          for(JButton button : enabledButtonsOnLivingProcess)
+            button.setEnabled(true);
+          for(JButton button : enabledButtonsOnDyingProcess)
+            button.setEnabled(false);
+          
           try(BufferedReader streamReader = new BufferedReader(
               new InputStreamReader(process.getInputStream()))) {
             String line;
             while((line = streamReader.readLine()) != null)
               moduleComponent.putLine(line);
           }
+          
         } catch(IOException e) {
           e.printStackTrace();
           currentProcess.set(null);
         } finally {
           go.set(false);
+          for(JButton button : enabledButtonsOnDyingProcess)
+            button.setEnabled(true);
+          for(JButton button : enabledButtonsOnLivingProcess)
+            button.setEnabled(false);
         }
       }
     } catch(InterruptedException e) { }
   }
   
   public void go() {
+    for(JButton button : enabledButtonsOnDyingProcess)
+      button.setEnabled(false);
     go.set(true);
   }
   
   public void terminate() {
+    for(JButton button : enabledButtonsOnLivingProcess)
+      button.setEnabled(false);
     Process process = currentProcess.get();
     if(process != null) {
       process.descendants().forEach(p -> {
@@ -174,5 +194,13 @@ public class ModuleHandler implements Runnable {
   
   public ModuleID getModuleID() {
     return moduleID;
+  }
+  
+  public void addButtonToEnableOnLivingProcess(JButton button) {
+    enabledButtonsOnLivingProcess.add(button);
+  }
+  
+  public void addButtonToEnableOnDyingProcess(JButton button) {
+    enabledButtonsOnDyingProcess.add(button);
   }
 }

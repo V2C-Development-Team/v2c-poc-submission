@@ -38,10 +38,11 @@ public class ModuleComponent extends JPanel {
     textArea.insert(line + '\n', 0);
   }
   
-  public void addButton(String label, ActionListener listener) {
+  public JButton addButton(String label, ActionListener listener) {
     JButton button = new JButton(label);
     button.addActionListener(listener);
     buttonPanel.add(button);
+    return button;
   }
   
 }
