@@ -158,6 +158,7 @@ public class ModuleHandler implements Runnable {
             button.setEnabled(true);
           for(JButton button : enabledButtonsOnDyingProcess)
             button.setEnabled(false);
+          moduleComponent.putLine("Starting module...");
           
           try(BufferedReader streamReader = new BufferedReader(
               new InputStreamReader(process.getInputStream()))) {
@@ -177,6 +178,7 @@ public class ModuleHandler implements Runnable {
             button.setEnabled(true);
           for(JButton button : enabledButtonsOnLivingProcess)
             button.setEnabled(false);
+          moduleComponent.putLine("Module terminated.");
           
           if(moduleID.hasTunnel() && tunnel != null)
             tunnel.spinDown();
