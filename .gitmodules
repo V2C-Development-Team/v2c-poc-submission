@@ -13,3 +13,6 @@
 [submodule "v2c-recognizer"]
 	path = v2c-recognizer
 	url = git@github.com:V2C-Development-Team/v2c-recognizer
+[submodule "v2c-dashboard-backend"]
+	path = v2c-dashboard-backend
+	url = git@github.com:V2C-Development-Team/v2c-dashboard-backend.git

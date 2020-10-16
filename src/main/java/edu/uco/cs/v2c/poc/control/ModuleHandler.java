@@ -16,6 +16,8 @@ import javax.swing.JButton;
 import org.apache.commons.lang3.SystemUtils;
 
 import edu.uco.cs.v2c.poc.ModuleID;
+import edu.uco.cs.v2c.poc.net.Tunnel;
+import edu.uco.cs.v2c.poc.ui.HomeComponent;
 import edu.uco.cs.v2c.poc.ui.ModuleComponent;
 
 public class ModuleHandler implements Runnable {
@@ -61,6 +63,7 @@ public class ModuleHandler implements Runnable {
   
   private AtomicBoolean go = new AtomicBoolean();
   private AtomicReference<Process> currentProcess = new AtomicReference<>();
+  private HomeComponent homeComponent = null;
   private ModuleComponent moduleComponent = null;
   private ModuleID moduleID = null;
   private Set<JButton> enabledButtonsOnLivingProcess = new HashSet<>();
@@ -68,9 +71,11 @@ public class ModuleHandler implements Runnable {
   private String runtimeBin = null;
   private String moduleBin = null;
   private Thread thread = null;
+  private Tunnel tunnel = null;
   
-  private ModuleHandler(ModuleComponent moduleComponent, ModuleID moduleID) {
+  private ModuleHandler(HomeComponent homeComponent, ModuleComponent moduleComponent, ModuleID moduleID) {
     this.moduleID = moduleID;
+    this.homeComponent = homeComponent;
     this.moduleComponent = moduleComponent;
     if(moduleID != null) {
       moduleComponent.setActive(false);
@@ -79,8 +84,8 @@ public class ModuleHandler implements Runnable {
     }
   }
   
-  public static ModuleHandler build(ModuleComponent moduleComponent, ModuleID moduleID) {
-    ModuleHandler handler = new ModuleHandler(moduleComponent, moduleID);
+  public static ModuleHandler build(HomeComponent homeComponent, ModuleComponent moduleComponent, ModuleID moduleID) {
+    ModuleHandler handler = new ModuleHandler(homeComponent, moduleComponent, moduleID);
     handler.thread = new Thread(handler);
     handler.thread.setDaemon(true);
     handler.thread.start();
@@ -141,14 +146,19 @@ public class ModuleHandler implements Runnable {
         processBuilder.redirectErrorStream(true);
         
         try {
+          if(moduleID.hasTunnel() && tunnel != null && tunnel.isEnabled())
+            tunnel.spinUp();
+          
           Process process = processBuilder.start();
           currentProcess.set(process);
           
           moduleComponent.setActive(true);
+          homeComponent.notifyModuleStateChange(moduleID, true);
           for(JButton button : enabledButtonsOnLivingProcess)
             button.setEnabled(true);
           for(JButton button : enabledButtonsOnDyingProcess)
             button.setEnabled(false);
+          moduleComponent.putLine("Starting module...");
           
           try(BufferedReader streamReader = new BufferedReader(
               new InputStreamReader(process.getInputStream()))) {
@@ -163,10 +173,15 @@ public class ModuleHandler implements Runnable {
         } finally {
           go.set(false);
           moduleComponent.setActive(false);
+          homeComponent.notifyModuleStateChange(moduleID, false);
           for(JButton button : enabledButtonsOnDyingProcess)
             button.setEnabled(true);
           for(JButton button : enabledButtonsOnLivingProcess)
             button.setEnabled(false);
+          moduleComponent.putLine("Module terminated.");
+          
+          if(moduleID.hasTunnel() && tunnel != null)
+            tunnel.spinDown();
         }
       }
     } catch(InterruptedException e) { }
@@ -204,5 +219,9 @@ public class ModuleHandler implements Runnable {
   
   public void addButtonToEnableOnDyingProcess(JButton button) {
     enabledButtonsOnDyingProcess.add(button);
+  }
+  
+  public void setTunnel(Tunnel tunnel) {
+    this.tunnel = tunnel;
   }
 }

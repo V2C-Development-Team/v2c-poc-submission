@@ -11,19 +11,19 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import edu.uco.cs.v2c.poc.control.ConfigureAction;
+import edu.uco.cs.v2c.poc.control.ModuleConfigAction;
 import edu.uco.cs.v2c.poc.control.ModuleHandler.ProcessType;
 
-public class ConfigurationFrame extends JFrame {
+public class ModuleConfigFrame extends JFrame {
   
-  private enum ConfigOption {
+  private enum ModuleConfigOption {
     RUNTIME,
     MODULE;
     
     private JLabel label = null;
     private JTextField textField = new JTextField(10);
     
-    private ConfigOption() {
+    private ModuleConfigOption() {
       String[] tokens = name().split("_");
       StringBuilder sb = new StringBuilder();
       for(String token : tokens) {
@@ -43,22 +43,22 @@ public class ConfigurationFrame extends JFrame {
     }
   }
   
-  private ConfigureAction configureAction = null;
+  private ModuleConfigAction moduleConfigAction = null;
   private JPanel buttonPanel = new JPanel();
   private JPanel configPanel = new JPanel();
   
-  public ConfigurationFrame(ConfigureAction configureAction) {
-    super(configureAction.getModuleHandler().getModuleID().toString() + " Config");
-    this.configureAction = configureAction;
+  public ModuleConfigFrame(ModuleConfigAction moduleConfigAction) {
+    super(moduleConfigAction.getModuleHandler().getModuleID().toString() + " Config");
+    this.moduleConfigAction = moduleConfigAction;
     setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     
     JButton saveButton = new JButton("SAVE");
     saveButton.addActionListener(new ActionListener() {
       @Override public void actionPerformed(ActionEvent e) {
         setVisible(false);
-        configureAction.onConfigUpdate(
-            ConfigOption.RUNTIME.getTextField().getText(),
-            ConfigOption.MODULE.getTextField().getText());
+        moduleConfigAction.onConfigUpdate(
+            ModuleConfigOption.RUNTIME.getTextField().getText(),
+            ModuleConfigOption.MODULE.getTextField().getText());
       } 
     });
     buttonPanel.add(saveButton);
@@ -66,9 +66,9 @@ public class ConfigurationFrame extends JFrame {
     SpringLayout layout = new SpringLayout();
     configPanel.setLayout(layout);
     
-    int rowCount = ConfigOption.values().length;
+    int rowCount = ModuleConfigOption.values().length;
     
-    for(ConfigOption option : ConfigOption.values()) {
+    for(ModuleConfigOption option : ModuleConfigOption.values()) {
       configPanel.add(option.getLabel());
       configPanel.add(option.getTextField());
     }
@@ -83,10 +83,10 @@ public class ConfigurationFrame extends JFrame {
   
   @Override public void setVisible(boolean visible) {
     if(visible) {
-      ConfigOption.RUNTIME.getTextField().setText(
-          configureAction.getModuleHandler().getRuntimeBin());
-      ConfigOption.MODULE.getTextField().setText(
-          configureAction.getModuleHandler().getModuleBin());
+      ModuleConfigOption.RUNTIME.getTextField().setText(
+          moduleConfigAction.getModuleHandler().getRuntimeBin());
+      ModuleConfigOption.MODULE.getTextField().setText(
+          moduleConfigAction.getModuleHandler().getModuleBin());
     }
     super.setVisible(visible);
   }
