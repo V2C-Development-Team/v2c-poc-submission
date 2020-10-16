@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import org.apache.commons.lang3.SystemUtils;
 
 import edu.uco.cs.v2c.poc.ModuleID;
+import edu.uco.cs.v2c.poc.net.Tunnel;
 import edu.uco.cs.v2c.poc.ui.ModuleComponent;
 
 public class ModuleHandler implements Runnable {
@@ -68,6 +69,7 @@ public class ModuleHandler implements Runnable {
   private String runtimeBin = null;
   private String moduleBin = null;
   private Thread thread = null;
+  private Tunnel tunnel = null;
   
   private ModuleHandler(ModuleComponent moduleComponent, ModuleID moduleID) {
     this.moduleID = moduleID;
@@ -141,6 +143,9 @@ public class ModuleHandler implements Runnable {
         processBuilder.redirectErrorStream(true);
         
         try {
+          if(moduleID.hasTunnel() && tunnel != null && tunnel.isEnabled())
+            tunnel.spinUp();
+          
           Process process = processBuilder.start();
           currentProcess.set(process);
           
@@ -167,6 +172,9 @@ public class ModuleHandler implements Runnable {
             button.setEnabled(true);
           for(JButton button : enabledButtonsOnLivingProcess)
             button.setEnabled(false);
+          
+          if(moduleID.hasTunnel() && tunnel != null)
+            tunnel.spinDown();
         }
       }
     } catch(InterruptedException e) { }
@@ -204,5 +212,9 @@ public class ModuleHandler implements Runnable {
   
   public void addButtonToEnableOnDyingProcess(JButton button) {
     enabledButtonsOnDyingProcess.add(button);
+  }
+  
+  public void setTunnel(Tunnel tunnel) {
+    this.tunnel = tunnel;
   }
 }

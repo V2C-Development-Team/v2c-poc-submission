@@ -15,7 +15,7 @@ public class SubmissionPOC {
   
   public static void main(String[] args) {
     LandingFrame landingFrame = new LandingFrame();
-    Tunnel tunnel = new Tunnel();
+    
     for(ModuleID moduleID : ModuleID.values()) {
       if(moduleID.getProcessType() == null) continue;
       ModuleComponent moduleComponent = landingFrame.getModule(moduleID);
@@ -26,10 +26,12 @@ public class SubmissionPOC {
       stopButton.setEnabled(false);
       moduleHandler.addButtonToEnableOnLivingProcess(stopButton);
       moduleComponent.addButton("CONFIGURE", new ModuleConfigAction(moduleHandler));
+      
+      if(moduleID.hasTunnel()) {
+        Tunnel tunnel = new Tunnel();
+        moduleComponent.addButton("TUNNEL", new TunnelConfigAction(moduleHandler, tunnel));
+      }
     }
-    
-    landingFrame.getModule(ModuleID.DASHBOARD_BACKEND).addButton(
-        "TUNNEL", new TunnelConfigAction(tunnel));
   }
   
 }

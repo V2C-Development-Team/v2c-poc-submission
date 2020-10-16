@@ -1,18 +1,18 @@
 package edu.uco.cs.v2c.poc.control;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 import edu.uco.cs.v2c.poc.net.Tunnel;
 import edu.uco.cs.v2c.poc.ui.TunnelConfigFrame;
 
-public class TunnelConfigAction implements ActionListener {
+public class TunnelConfigAction extends ModuleAction {
   
   private Tunnel tunnel = null;
   private TunnelConfigFrame tunnelConfigFrame = null;
   
-  public TunnelConfigAction(Tunnel tunnel) {
+  public TunnelConfigAction(ModuleHandler handler, Tunnel tunnel) {
+    super(handler);
     this.tunnel = tunnel;
   }
   

@@ -19,6 +19,10 @@ public class Tunnel {
   private String username = null;
   private String keyfilePassword = null;
   
+  public boolean isEnabled() {
+    return enabled;
+  }
+  
   public Tunnel setEnabled(boolean enabled) {
     this.enabled = enabled;
     return this;
