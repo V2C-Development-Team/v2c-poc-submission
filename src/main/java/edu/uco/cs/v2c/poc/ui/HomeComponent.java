@@ -20,8 +20,8 @@ import edu.uco.cs.v2c.poc.control.ModuleHandler;
 
 public class HomeComponent extends JPanel {
 
-  private JButton startAllButton = new JButton("START ALL");
-  private JButton stopAllButton = new JButton("STOP ALL");
+  private JButton startAllButton = new JButton("LAUNCH ALL");
+  private JButton stopAllButton = new JButton("KILL ALL");
   private Map<ModuleID, ModuleHandler> handlers = new ConcurrentHashMap<>();
   private Map<ModuleID, ModuleStatusCard> statusCards = new ConcurrentHashMap<>();
   private Set<ModuleID> activeModules = new CopyOnWriteArraySet<>();
