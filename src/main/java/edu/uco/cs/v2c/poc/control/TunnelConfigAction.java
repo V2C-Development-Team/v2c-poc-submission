@@ -10,13 +10,15 @@ import edu.uco.cs.v2c.poc.ui.TunnelConfigFrame;
 public class TunnelConfigAction implements ActionListener {
   
   private Tunnel tunnel = null;
+  private TunnelConfigFrame tunnelConfigFrame = null;
   
   public TunnelConfigAction(Tunnel tunnel) {
     this.tunnel = tunnel;
   }
   
   @Override public void actionPerformed(ActionEvent e) {
-    TunnelConfigFrame tunnelConfigFrame = new TunnelConfigFrame(this);
+    if(tunnelConfigFrame == null)
+      tunnelConfigFrame = new TunnelConfigFrame(this);
     tunnelConfigFrame.setVisible(true);
   }
   

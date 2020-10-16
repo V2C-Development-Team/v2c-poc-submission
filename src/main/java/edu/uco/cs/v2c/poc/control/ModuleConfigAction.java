@@ -6,12 +6,15 @@ import edu.uco.cs.v2c.poc.ui.ModuleConfigFrame;
 
 public class ModuleConfigAction extends ModuleAction {
   
+  private ModuleConfigFrame moduleConfigFrame = null;
+  
   public ModuleConfigAction(ModuleHandler handler) {
     super(handler);
   }
 
   @Override public void actionPerformed(ActionEvent e) {
-    ModuleConfigFrame moduleConfigFrame = new ModuleConfigFrame(this);
+    if(moduleConfigFrame == null)
+      moduleConfigFrame = new ModuleConfigFrame(this);
     moduleConfigFrame.setVisible(true);
   }
   
