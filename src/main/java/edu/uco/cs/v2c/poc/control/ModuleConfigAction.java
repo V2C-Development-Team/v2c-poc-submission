@@ -2,17 +2,17 @@ package edu.uco.cs.v2c.poc.control;
 
 import java.awt.event.ActionEvent;
 
-import edu.uco.cs.v2c.poc.ui.ConfigurationFrame;
+import edu.uco.cs.v2c.poc.ui.ModuleConfigFrame;
 
-public class ConfigureAction extends ModuleAction {
+public class ModuleConfigAction extends ModuleAction {
   
-  public ConfigureAction(ModuleHandler handler) {
+  public ModuleConfigAction(ModuleHandler handler) {
     super(handler);
   }
 
   @Override public void actionPerformed(ActionEvent e) {
-    ConfigurationFrame configurationFrame = new ConfigurationFrame(this);
-    configurationFrame.setVisible(true);
+    ModuleConfigFrame moduleConfigFrame = new ModuleConfigFrame(this);
+    moduleConfigFrame.setVisible(true);
   }
   
   public void onConfigUpdate(String runtimeBin, String moduleBin) {
