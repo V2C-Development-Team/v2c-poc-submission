@@ -1,5 +1,10 @@
 package edu.uco.cs.v2c.poc;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.swing.JButton;
 
 import edu.uco.cs.v2c.poc.control.ModuleConfigAction;
@@ -13,6 +18,8 @@ import edu.uco.cs.v2c.poc.ui.ModuleComponent;
 
 public class SubmissionPOC {
   
+  private static Set<ModuleHandler> handlers = new HashSet<>();
+  
   public static void main(String[] args) {
     LandingFrame landingFrame = new LandingFrame();
     
@@ -20,6 +27,7 @@ public class SubmissionPOC {
       if(moduleID.getProcessType() == null) continue;
       ModuleComponent moduleComponent = landingFrame.getModule(moduleID);
       ModuleHandler moduleHandler = ModuleHandler.build(landingFrame.getHomeComponent(), moduleComponent, moduleID);
+      handlers.add(moduleHandler);
       
       JButton startButton = moduleComponent.addButton("START MODULE", new StartAction(moduleHandler));
       moduleHandler.addButtonToEnableOnDyingProcess(startButton);
@@ -36,6 +44,28 @@ public class SubmissionPOC {
       
       landingFrame.getHomeComponent().addModuleHandler(moduleHandler);
     }
+    
+    landingFrame.addWindowListener(new WindowListener() {
+
+      @Override public void windowOpened(WindowEvent e) { }
+
+      @Override public void windowClosing(WindowEvent e) {
+        for(ModuleHandler handler : handlers)
+          handler.terminate();
+      }
+
+      @Override public void windowClosed(WindowEvent e) { }
+
+      @Override public void windowIconified(WindowEvent e) { }
+
+      @Override public void windowDeiconified(WindowEvent e) { }
+
+      @Override public void windowActivated(WindowEvent e) { }
+
+      @Override public void windowDeactivated(WindowEvent e) { }
+      
+    });
+    
   }
   
 }
