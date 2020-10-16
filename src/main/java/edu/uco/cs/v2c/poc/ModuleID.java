@@ -3,7 +3,6 @@ package edu.uco.cs.v2c.poc;
 import edu.uco.cs.v2c.poc.control.ModuleHandler.ProcessType;
 
 public enum ModuleID {
-  HOME,
   DISPATCHER(ProcessType.JAVA_PROCESS, "v2c-dispatcher/build/libs/v2c-dispatcher.jar", false),
   RECOGNIZER(ProcessType.PYTHON_PROCESS, "v2c-recognizer/Recognizer/speech.py", false),
   DESKTOP_CONTROLLER(ProcessType.JAVA_PROCESS, "v2c-desktop-controller-linux/build/libs/v2c-desktop-controller-linux.jar", false),
@@ -14,10 +13,6 @@ public enum ModuleID {
   private String name = null;
   private String defaultModulePath = null;
   private ProcessType processType = null;
-  
-  private ModuleID() {
-    this(null, null, false);
-  }
   
   private ModuleID(ProcessType processType, String defaultModulePath, boolean hasTunnel) {
     this.hasTunnel = hasTunnel;

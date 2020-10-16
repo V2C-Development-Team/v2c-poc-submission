@@ -11,9 +11,6 @@ public class Tunnel {
   private int localPort = -1;
   private int internalPort = -1;
   private int remotePort = -1;
-  // private Connection connection = null;
-  // private File keyfile = null;
-  // private LocalPortForwarder forwarder = null;
   private JSch jsch = null;
   private Session session = null;
   private String keyfile = null;
@@ -85,14 +82,6 @@ public class Tunnel {
       session.connect();
       session.setPortForwardingL(localPort, internalHost, internalPort);
       
-      /*
-      connection = new Connection(remoteHost, remotePort);
-      connection.connect();
-      if(!connection.authenticateWithPublicKey(username, keyfile, keyfilePassword))
-        throw new IOException("SSH authentication failed for " + remoteHost);
-      
-      forwarder = connection.createLocalPortForwarder(localPort, internalHost, internalPort);
-      */
       System.out.println("Tunnel successfully established.");
       
     } catch(Exception e) {

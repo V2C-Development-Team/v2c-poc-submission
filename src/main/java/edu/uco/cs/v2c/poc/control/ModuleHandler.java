@@ -17,6 +17,7 @@ import org.apache.commons.lang3.SystemUtils;
 
 import edu.uco.cs.v2c.poc.ModuleID;
 import edu.uco.cs.v2c.poc.net.Tunnel;
+import edu.uco.cs.v2c.poc.ui.HomeComponent;
 import edu.uco.cs.v2c.poc.ui.ModuleComponent;
 
 public class ModuleHandler implements Runnable {
@@ -62,6 +63,7 @@ public class ModuleHandler implements Runnable {
   
   private AtomicBoolean go = new AtomicBoolean();
   private AtomicReference<Process> currentProcess = new AtomicReference<>();
+  private HomeComponent homeComponent = null;
   private ModuleComponent moduleComponent = null;
   private ModuleID moduleID = null;
   private Set<JButton> enabledButtonsOnLivingProcess = new HashSet<>();
@@ -71,8 +73,9 @@ public class ModuleHandler implements Runnable {
   private Thread thread = null;
   private Tunnel tunnel = null;
   
-  private ModuleHandler(ModuleComponent moduleComponent, ModuleID moduleID) {
+  private ModuleHandler(HomeComponent homeComponent, ModuleComponent moduleComponent, ModuleID moduleID) {
     this.moduleID = moduleID;
+    this.homeComponent = homeComponent;
     this.moduleComponent = moduleComponent;
     if(moduleID != null) {
       moduleComponent.setActive(false);
@@ -81,8 +84,8 @@ public class ModuleHandler implements Runnable {
     }
   }
   
-  public static ModuleHandler build(ModuleComponent moduleComponent, ModuleID moduleID) {
-    ModuleHandler handler = new ModuleHandler(moduleComponent, moduleID);
+  public static ModuleHandler build(HomeComponent homeComponent, ModuleComponent moduleComponent, ModuleID moduleID) {
+    ModuleHandler handler = new ModuleHandler(homeComponent, moduleComponent, moduleID);
     handler.thread = new Thread(handler);
     handler.thread.setDaemon(true);
     handler.thread.start();
@@ -150,6 +153,7 @@ public class ModuleHandler implements Runnable {
           currentProcess.set(process);
           
           moduleComponent.setActive(true);
+          homeComponent.notifyModuleStateChange(moduleID, true);
           for(JButton button : enabledButtonsOnLivingProcess)
             button.setEnabled(true);
           for(JButton button : enabledButtonsOnDyingProcess)
@@ -168,6 +172,7 @@ public class ModuleHandler implements Runnable {
         } finally {
           go.set(false);
           moduleComponent.setActive(false);
+          homeComponent.notifyModuleStateChange(moduleID, false);
           for(JButton button : enabledButtonsOnDyingProcess)
             button.setEnabled(true);
           for(JButton button : enabledButtonsOnLivingProcess)

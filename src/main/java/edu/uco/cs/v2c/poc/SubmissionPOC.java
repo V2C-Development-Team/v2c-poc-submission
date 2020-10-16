@@ -19,7 +19,8 @@ public class SubmissionPOC {
     for(ModuleID moduleID : ModuleID.values()) {
       if(moduleID.getProcessType() == null) continue;
       ModuleComponent moduleComponent = landingFrame.getModule(moduleID);
-      ModuleHandler moduleHandler = ModuleHandler.build(moduleComponent, moduleID);
+      ModuleHandler moduleHandler = ModuleHandler.build(landingFrame.getHomeComponent(), moduleComponent, moduleID);
+      
       JButton startButton = moduleComponent.addButton("START MODULE", new StartAction(moduleHandler));
       moduleHandler.addButtonToEnableOnDyingProcess(startButton);
       JButton stopButton = moduleComponent.addButton("STOP MODULE", new StopAction(moduleHandler));
@@ -32,6 +33,8 @@ public class SubmissionPOC {
         moduleComponent.addButton("TUNNEL", new TunnelConfigAction(moduleHandler, tunnel));
         moduleHandler.setTunnel(tunnel);
       }
+      
+      landingFrame.getHomeComponent().addModuleHandler(moduleHandler);
     }
   }
   
