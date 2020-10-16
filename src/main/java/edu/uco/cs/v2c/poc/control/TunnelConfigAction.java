@@ -22,23 +22,21 @@ public class TunnelConfigAction extends ModuleAction {
     tunnelConfigFrame.setVisible(true);
   }
   
-  public boolean onConfigUpdate(String localPort, String remoteHost,
+  public boolean onConfigUpdate(String localPort, String remoteHost, String remotePort,
       String internalHost, String internalPort, String username,
       String keyfilePath, String keyfilePassword) {
     
     try {
       int lPort = Integer.parseInt(localPort);
       int iPort = Integer.parseInt(internalPort);
-      File kFile = new File(keyfilePath);
-      
-      if(!kFile.isFile() || !kFile.canRead())
-        return false;
+      int rPort = Integer.parseInt(remotePort);
       
       tunnel.setLocalPort(lPort)
           .setRemoteHost(remoteHost)
+          .setRemotePort(rPort)
           .setInternalHost(internalHost)
           .setInternalPort(iPort)
-          .setKeyfile(kFile, keyfilePassword.isBlank() ? null : keyfilePassword);
+          .setKeyfile(keyfilePath, keyfilePassword.isBlank() ? null : keyfilePassword);
       
       return true;
       

@@ -30,6 +30,7 @@ public class SubmissionPOC {
       if(moduleID.hasTunnel()) {
         Tunnel tunnel = new Tunnel();
         moduleComponent.addButton("TUNNEL", new TunnelConfigAction(moduleHandler, tunnel));
+        moduleHandler.setTunnel(tunnel);
       }
     }
   }

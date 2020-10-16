@@ -18,6 +18,7 @@ public class TunnelConfigFrame extends JFrame {
   private enum TunnelConfigOption {
     LOCAL_PORT,
     REMOTE_HOST,
+    REMOTE_PORT,
     INTERNAL_HOST,
     INTERNAL_PORT,
     USERNAME,
@@ -62,6 +63,7 @@ public class TunnelConfigFrame extends JFrame {
         tunnelConfigAction.onConfigUpdate(
             TunnelConfigOption.LOCAL_PORT.getTextField().getText(),
             TunnelConfigOption.REMOTE_HOST.getTextField().getText(),
+            TunnelConfigOption.REMOTE_PORT.getTextField().getText(),
             TunnelConfigOption.INTERNAL_HOST.getTextField().getText(),
             TunnelConfigOption.INTERNAL_PORT.getTextField().getText(),
             TunnelConfigOption.USERNAME.getTextField().getText(),

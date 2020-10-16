@@ -1,19 +1,22 @@
 package edu.uco.cs.v2c.poc.net;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.Properties;
 
-import ch.ethz.ssh2.Connection;
-import ch.ethz.ssh2.LocalPortForwarder;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
 
 public class Tunnel {
 
   private boolean enabled = false;
   private int localPort = -1;
   private int internalPort = -1;
-  private Connection connection = null;
-  private File keyfile = null;
-  private LocalPortForwarder forwarder = null;
+  private int remotePort = -1;
+  // private Connection connection = null;
+  // private File keyfile = null;
+  // private LocalPortForwarder forwarder = null;
+  private JSch jsch = null;
+  private Session session = null;
+  private String keyfile = null;
   private String internalHost = null;
   private String remoteHost = null;
   private String username = null;
@@ -33,12 +36,17 @@ public class Tunnel {
     return this;
   }
   
+  public Tunnel setRemotePort(int remotePort) {
+    this.remotePort = remotePort;
+    return this;
+  }
+  
   public Tunnel setUsername(String username) {
     this.username = username;
     return this;
   }
   
-  public Tunnel setKeyfile(File keyfile, String keyfilePassword) {
+  public Tunnel setKeyfile(String keyfile, String keyfilePassword) {
     this.keyfile = keyfile;
     this.keyfilePassword = keyfilePassword;
     return this;
@@ -60,28 +68,45 @@ public class Tunnel {
   }
   
   public Tunnel spinUp() {
+    if(jsch != null) return this;
+    
     try {
-      connection = new Connection(remoteHost);
+      jsch = new JSch();
+      
+      if(keyfilePassword == null) jsch.addIdentity(keyfile);
+      else jsch.addIdentity(keyfile, keyfilePassword);
+      
+      session = jsch.getSession(username, remoteHost, remotePort);
+      
+      Properties properties = new Properties();
+      properties.put("StrictHostKeyChecking", "no");
+      session.setConfig(properties);
+      
+      session.connect();
+      session.setPortForwardingL(localPort, internalHost, internalPort);
+      
+      /*
+      connection = new Connection(remoteHost, remotePort);
       connection.connect();
       if(!connection.authenticateWithPublicKey(username, keyfile, keyfilePassword))
         throw new IOException("SSH authentication failed for " + remoteHost);
       
-      forwarder = connection.createLocalPortForwarder(localPort, internalHost, internalPort); 
-    } catch(IOException e) {
-      System.err.printf("Some exception was thrown when spinning up a tunnel to %1$s: %3$s\n", remoteHost, e.getMessage());
+      forwarder = connection.createLocalPortForwarder(localPort, internalHost, internalPort);
+      */
+      System.out.println("Tunnel successfully established.");
+      
+    } catch(Exception e) {
+      System.err.printf("Some exception was thrown when spinning up a tunnel to %1$s: %2$s\n", remoteHost, e.getMessage());
+      e.printStackTrace();
     }
     
     return null;
   }
   
   public Tunnel spinDown() {
-    try {
-      if(forwarder != null) forwarder.close();
-      if(connection != null) connection.close();
-    } catch(IOException e) { }
-    
-    forwarder = null;
-    connection = null;
+    if(session != null) session.disconnect();
+    session = null;
+    jsch = null;
     
     return this;
   }
