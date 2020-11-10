@@ -7,7 +7,8 @@ public enum ModuleID {
   RECOGNIZER(ProcessType.PYTHON_PROCESS, "v2c-recognizer/Recognizer/speech.py", false),
   DESKTOP_CONTROLLER(ProcessType.JAVA_PROCESS, "v2c-desktop-controller-linux/build/libs/v2c-desktop-controller-linux.jar", false),
   DASHBOARD_BACKEND(ProcessType.JAVA_PROCESS, "v2c-dashboard-backend/build/libs/v2c-dashboard-backend.jar", true),
-  DASHBOARD_FRONTEND(ProcessType.NPM_PROCESS, "v2c-dashboard", false);
+  DASHBOARD_FRONTEND(ProcessType.NPM_PROCESS, "v2c-dashboard", false),
+  GAMES(ProcessType.SERVE_PROCESS, "v2c-gaming-poc", false);
   
   private boolean hasTunnel = false;
   private String name = null;

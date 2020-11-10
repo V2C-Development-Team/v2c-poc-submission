@@ -25,7 +25,8 @@ public class ModuleHandler implements Runnable {
   public static enum ProcessType {
     JAVA_PROCESS("java"),
     NPM_PROCESS("npm"),
-    PYTHON_PROCESS("python");
+    PYTHON_PROCESS("python"),
+    SERVE_PROCESS("serve");
     
     private String bin = null;
     
@@ -135,6 +136,12 @@ public class ModuleHandler implements Runnable {
           commands.add(moduleTokens[moduleTokens.length - 1]);
           if(moduleTokens.length > 1)
             workDir = moduleBin.substring(0, moduleBin.length() - moduleTokens[moduleTokens.length - 1].length());
+          break;
+        case SERVE_PROCESS:
+          commands.add(runtimeBin);
+          commands.add("-l");
+          commands.add("5000");
+          workDir = moduleBin;
           break;
         default:
           break;

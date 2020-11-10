@@ -15,7 +15,7 @@ for %%m in (v2c-desktop-controller-linux v2c-dispatcher v2c-dashboard-backend) d
 )
 
 rem build the python modules
-for %%p in (pyaudio playsound pocketsphinx SpeechRecognition pydub websocket-client websocket keyboard pycaw) do (
+for %%p in (pyaudio playsound pocketsphinx SpeechRecognition pydub websocket-client websocket keyboard pycaw pystray) do (
   echo Checking for %%p
   pip list | find "%%p">nul
   if errorlevel 1 pip install "%%p"
@@ -28,6 +28,7 @@ for %%n in (v2c-dashboard) do (
   npm install
   cd ..
 )
+npm install -g serve
 
 echo Done.
 @echo on
